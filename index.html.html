@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo de Adivinhação</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 30px 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 1.8rem;
+    }
+
+    p {
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 1.2rem;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 15px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input[type="number"]:focus {
+      border-color: #667eea;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #667eea;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #5a67d8;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      min-height: 25px;
+      color: #4a5568;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>🎯 Adivinhe o Número</h1>
+    <p>Escolha um número entre <strong>1 e 100</strong>. Consegue adivinhar?</p>
+    
+    <input type="number" id="palpite" placeholder="Digite seu palpite" min="1" max="100">
+    <button id="btnAcao" onclick="jogar()">CHUTAR</button>
+    
+    <div class="message" id="mensagem"></div>
+  </div>
+
+  <script>
+    let numeroSecreto = Math.floor(Math.random() * 100) + 1;
+    let tentativas = 0;
+    let jogoFinalizado = false;
+
+    function jogar() {
+      const input = document.getElementById('palpite');
+      const msg = document.getElementById('mensagem');
+      const btn = document.getElementById('btnAcao');
+
+      if (jogoFinalizado) {
+        reiniciarJogo();
+        return;
+      }
+
+      const palpite = parseInt(input.value);
+
+      if (isNaN(palpite) || palpite < 1 || palpite > 100) {
+        msg.textContent = "⚠️ Digite um número válido entre 1 e 100!";
+        msg.style.color = "#e53e3e";
+        return;
+      }
+
+      tentativas++;
+
+      if (palpite < numeroSecreto) {
+        msg.textContent = "📈 MUITO BAIXO! Tente um maior.";
+        msg.style.color = "#dd6b20";
+      } else if (palpite > numeroSecreto) {
+        msg.textContent = "📉 MUITO ALTO! Tente um menor.";
+        msg.style.color = "#dd6b20";
+      } else {
+        msg.textContent = `🎉 ACERTOU em ${tentativas} tentativa(s)!`;
+        msg.style.color = "#38a169";
+        btn.textContent = "JOGAR NOVAMENTE";
+        jogoFinalizado = true;
+      }
+
+      input.value = '';
+      input.focus();
+    }
+
+    function reiniciarJogo() {
+      numeroSecreto = Math.floor(Math.random() * 100) + 1;
+      tentativas = 0;
+      jogoFinalizado = false;
+      document.getElementById('mensagem').textContent = '';
+      document.getElementById('btnAcao').textContent = 'CHUTAR';
+    }
+  </script>
+
+</body>
+</html>
